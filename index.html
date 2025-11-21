@@ -1,4 +1,196 @@
-<script type="module">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎄 Secret Santa Draw 🎅</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0fdf4; /* Light frosty green background */
+            transition: background-color 0.3s;
+        }
+        .card {
+            background-color: #ffffff;
+            border-radius: 1.5rem; /* More rounded */
+            box-shadow: 0 10px 20px -5px rgba(185, 28, 28, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Red tinted shadow */
+            transition: transform 0.3s ease-in-out;
+            border: 1px solid #dcfce7; /* Subtle light green border */
+        }
+        /* Christmas Red Primary Button */
+        .btn-primary {
+            background-color: #b91c1c; /* Deep Christmas Red */
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 1rem;
+            font-weight: 700;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        .btn-primary:hover {
+            background-color: #991b1b; /* Darker Red hover */
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+        /* Christmas Green Secondary Button */
+        .btn-secondary {
+            background-color: #d1fae5; /* Light Green */
+            color: #065f46; /* Dark Green Text */
+            padding: 0.75rem 1rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            border: 1px solid #10b981;
+            transition: background-color 0.2s;
+        }
+        .btn-secondary:hover {
+            background-color: #a7f3d0; /* Lighter Green hover */
+        }
+        .input-style {
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            border: 1px solid #991b1b; /* Red border for input focus */
+            width: 100%;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .input-style:focus {
+            outline: none;
+            border-color: #059669; /* Green focus ring */
+            box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.2);
+        }
+        .pulse-animation {
+            animation: pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .bg-exclusion {
+            background-color: #fffbeb; /* Gold/Cream tint */
+            border: 1px solid #fcd34d; /* Gold border */
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-start justify-center p-4">
+
+    <div id="app" class="w-full max-w-lg mt-4 space-y-6">
+        <div class="text-center">
+            <h1 class="text-5xl font-extrabold text-[#b91c1c] mb-2">🎄 Secret Santa Draw</h1>
+            <p class="text-lg text-gray-700 font-semibold mb-4">It's time to find out who you're buying for!</p>
+            <div id="user-info" class="text-xs text-gray-400">Loading user...</div>
+        </div>
+
+        <div class="card p-5 bg-green-50 space-y-3 border-4 border-[#059669]">
+            <h2 class="text-xl font-extrabold text-[#059669]">INSTRUCTIONS FOR THE WHOLE FAMILY:</h2>
+            <p class="text-sm text-gray-700">The app keeps track of your group using the **Group Name**.</p>
+            <ol class="list-decimal list-inside text-sm font-medium text-gray-700 space-y-2">
+                <li><strong class="text-[#b91c1c]">First Person (Organizer):</strong> Set the Group Name, add all the names, and click **DRAW NAMES NOW!**</li>
+                <li><strong class="text-[#059669]">Everyone Else:</strong> Enter the **EXACT SAME** Group Name and <strong class="text-red-700">PRESS HERE:</strong> <span class="bg-gray-200 p-1 rounded font-mono text-xs">LOAD/SAVE</span></li>
+                <li><strong class="text-[#b91c1c]">To See Your Result:</strong> Go to "Who did YOU Draw?", select your name, and your Secret Santa recipient will be revealed ONLY to you!</li>
+            </ol>
+        </div>
+
+
+        <div id="setup-card" class="card p-6 space-y-4">
+            <h2 class="text-2xl font-bold text-gray-700">1. Set Up & Load Your Group</h2>
+            <div id="loading-indicator" class="text-center text-gray-500 hidden">
+                <p class="pulse-animation">Loading group data...</p>
+            </div>
+
+            <label for="group-name" class="block text-sm font-medium text-gray-700">Group Name (e.g., SmithFamily2025)</label>
+            <div class="flex space-x-2">
+                <input type="text" id="group-name" placeholder="Enter group name or ID" class="input-style flex-grow">
+                <button onclick="loadGroup()" class="btn-secondary whitespace-nowrap">
+                    LOAD/SAVE
+                </button>
+            </div>
+            <p id="group-status" class="text-sm italic text-[#059669] font-medium"></p>
+
+            <h3 class="text-xl font-semibold text-gray-700 mt-4 pt-4 border-t border-gray-100">Participants (<span id="participant-count">0</span>)</h3>
+            <div class="flex space-x-2">
+                <input type="text" id="new-participant" placeholder="Add a family member's name" class="input-style flex-grow" onkeypress="handleParticipantInput(event)">
+                <button onclick="addParticipant()" class="btn-secondary">ADD</button>
+            </div>
+
+            <ul id="participant-list" class="space-y-2 max-h-48 overflow-y-auto pr-2">
+            </ul>
+            
+            <h3 class="text-xl font-semibold text-gray-700 mt-6 pt-4 border-t border-gray-100">Exclusion Rules (Optional)</h3>
+            <p class="text-sm text-gray-500">Stop Person A from giving to Person B (e.g., married couples).</p>
+
+            <div class="flex space-x-2">
+                <select id="person-a" class="input-style text-sm">
+                    <option value="">-- Person A --</option>
+                </select>
+                <select id="person-b" class="input-style text-sm">
+                    <option value="">-- Person B --</option>
+                </select>
+                <button onclick="addExclusion()" class="btn-secondary whitespace-nowrap">LINK EXCLUSION</button>
+            </div>
+            <ul id="exclusion-list" class="space-y-2 max-h-32 overflow-y-auto pr-2">
+            </ul>
+
+        </div>
+
+        <div id="draw-card" class="card p-6 space-y-6">
+            <h2 class="text-2xl font-bold text-gray-700">2. The Draw & Results</h2>
+
+            <div id="draw-actions">
+                <button onclick="drawNames()" id="draw-button" class="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed text-xl">
+                    <span id="draw-text">DRAW NAMES NOW!</span>
+                </button>
+                <p id="draw-message" class="mt-2 text-center text-[#b91c1c] font-bold"></p>
+                <p class="text-xs text-gray-500 text-center mt-2">Requires at least 3 names to start the draw.</p>
+            </div>
+
+            <div id="reveal-section" class="border-t pt-4 mt-4 hidden">
+                <h3 class="text-xl font-bold text-gray-700 mb-3">Who did YOU Draw?</h3>
+                <label for="my-name-select" class="block text-sm font-medium text-gray-700">Select <strong class="text-[#b91c1c]">YOUR NAME</strong> from the list:</label>
+                <select id="my-name-select" class="input-style mb-4" onchange="revealDraw()">
+                    <option value="">-- Select Your Name --</option>
+                </select>
+
+                <div id="my-draw-result" class="text-center p-4 bg-red-50 border border-red-200 rounded-lg text-lg font-bold text-red-700 min-h-[4rem] flex items-center justify-center">
+                    **Select your name above to see who you got!** <span class="text-xs italic">(Only you will see your result.)</span>
+                </div>
+
+                <div class="mt-4 pt-4 border-t border-gray-100">
+                    <h4 class="text-lg font-medium text-gray-700 mb-2">🎉 Announce Draw Complete (Optional)</h4>
+                    <button onclick="generateAnnouncement()" id="tts-button" class="btn-secondary w-full disabled:opacity-50 disabled:cursor-not-allowed">
+                        <span id="tts-text">Generate Audio Announcement</span>
+                    </button>
+                    <audio id="tts-audio" controls class="w-full mt-3 hidden"></audio>
+                </div>
+
+                <div class="mt-6 pt-6 border-t border-gray-100">
+                    <div class="flex justify-between items-center cursor-pointer p-3 bg-red-50 rounded-xl border border-red-300 shadow-sm hover:bg-red-100 transition-colors" onclick="toggleAdminView()">
+                        <h4 class="text-lg font-extrabold text-[#b91c1c] flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 2a1 1 0 00-1 1v1a1 1 0 002 0V3a1 1 0 00-1-1zm4.95 3.05a1 1 0 00-1.414 0l-.707.707a1 1 0 001.414 1.414l.707-.707a1 1 0 000-1.414zM16 10a1 1 0 00-1-1h-1a1 1 0 100 2h1a1 1 0 001-1zM5.05 5.05a1 1 0 00-1.414 0l-.707.707a1 1 0 101.414 1.414l.707-.707a1 1 0 000-1.414zM4 10a1 1 0 00-1-1H2a1 1 0 100 2h1a1 1 0 001-1z" clip-rule="evenodd" />
+                                <path fill-rule="evenodd" d="M10 12a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+                            </svg>
+                            Organizer View: Reveal ALL Pairs
+                        </h4>
+                        <svg id="admin-view-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#b91c1c] transition-transform duration-300 transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </div>
+                    
+                    <div id="admin-pairs-content" class="space-y-3 mt-3 hidden">
+                        <p class="text-sm font-bold text-white p-3 bg-red-700 rounded-lg shadow-md">
+                            <strong class="text-xl">⚠️ SPOILER WARNING:</strong> ONLY the organizer should click this. Revealing this list will spoil the entire draw for everyone who sees it.
+                        </p>
+                        <ul id="pairs-list" class="space-y-1 text-sm text-gray-600 p-3 bg-white border border-red-300 rounded-lg shadow-inner">
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, onSnapshot, collection, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
@@ -11,6 +203,7 @@
         // =================================================================
 
         // 1. Assign a unique app identifier (derived from your project ID)
+        // Note: Using the Project ID as part of the app ID ensures unique storage
         const appId = 'secret-santa-e681e-group';
 
         // 2. Your Firebase configuration object
@@ -156,7 +349,7 @@
                     }
                 }
                 
-                // *** FIX APPLIED HERE: Set isAuthReady and load the group ONLY after successful sign-in ***
+                // Set isAuthReady and load the group ONLY after successful sign-in
                 isAuthReady = true;
                 
                 $groupNameInput.value = groupName;
@@ -182,7 +375,6 @@
         }
 
         /** Loads group data from Firestore and sets up a real-time listener. */
-        // *** FIX APPLIED HERE: Added a parameter to suppress the initial error message for the async load. ***
         window.loadGroup = function(isInitialLoad = false) {
             if (!isAuthReady || !db) {
                 if (!isInitialLoad) {
@@ -458,7 +650,7 @@
 
                     // Find a valid match for the current giver
                     for (let j = 0; j < availableReceivers.length; j++) {
-                        const receiver = availableReceavers[j];
+                        const receiver = availableReceivers[j];
 
                         if (isAllowedPair(giver, receiver, exclusionList)) {
                             attemptPairs.push({ giver, receiver });
@@ -675,3 +867,5 @@
         }
 
     </script>
+</body>
+</html>
