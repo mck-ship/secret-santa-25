@@ -1,903 +1,856 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎄 Secret Santa Draw 🎅</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f0fdf4; /* Light frosty green background */
-            transition: background-color 0.3s;
-        }
-        .card {
-            background-color: #ffffff;
-            border-radius: 1.5rem; /* More rounded */
-            box-shadow: 0 10px 20px -5px rgba(185, 28, 28, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Red tinted shadow */
-            transition: transform 0.3s ease-in-out;
-            border: 1px solid #dcfce7; /* Subtle light green border */
-        }
-        /* Christmas Red Primary Button */
-        .btn-primary {
-            background-color: #b91c1c; /* Deep Christmas Red */
-            color: white;
-            padding: 1rem 1.5rem;
-            border-radius: 1rem;
-            font-weight: 700;
-            transition: background-color 0.2s, transform 0.1s;
-        }
-        .btn-primary:hover {
-            background-color: #991b1b; /* Darker Red hover */
-            transform: translateY(-2px);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-        }
-        /* Christmas Green Secondary Button */
-        .btn-secondary {
-            background-color: #d1fae5; /* Light Green */
-            color: #065f46; /* Dark Green Text */
-            padding: 0.75rem 1rem;
-            border-radius: 0.75rem;
-            font-weight: 600;
-            border: 1px solid #10b981;
-            transition: background-color 0.2s;
-        }
-        .btn-secondary:hover {
-            background-color: #a7f3d0; /* Lighter Green hover */
-        }
-        .input-style {
-            padding: 0.75rem;
-            border-radius: 0.5rem;
-            border: 1px solid #991b1b; /* Red border for input focus */
-            width: 100%;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-        .input-style:focus {
-            outline: none;
-            border-color: #059669; /* Green focus ring */
-            box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.2);
-        }
-        .pulse-animation {
-            animation: pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-        .bg-exclusion {
-            background-color: #fffbeb; /* Gold/Cream tint */
-            border: 1px solid #fcd34d; /* Gold border */
-        }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎄 Secret Santa Draw 🎅</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0fdf4; /* Light frosty green background */
+            transition: background-color 0.3s;
+        }
+        .card {
+            background-color: #ffffff;
+            border-radius: 1.5rem; /* More rounded */
+            box-shadow: 0 10px 20px -5px rgba(185, 28, 28, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Red tinted shadow */
+            transition: transform 0.3s ease-in-out;
+            border: 1px solid #dcfce7; /* Subtle light green border */
+        }
+        /* Christmas Red Primary Button */
+        .btn-primary {
+            background-color: #b91c1c; /* Deep Christmas Red */
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 1rem;
+            font-weight: 700;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        .btn-primary:hover {
+            background-color: #991b1b; /* Darker Red hover */
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+        /* Christmas Green Secondary Button */
+        .btn-secondary {
+            background-color: #d1fae5; /* Light Green */
+            color: #065f46; /* Dark Green Text */
+            padding: 0.75rem 1rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            border: 1px solid #10b981;
+            transition: background-color 0.2s;
+        }
+        .btn-secondary:hover {
+            background-color: #a7f3d0; /* Lighter Green hover */
+        }
+        .input-style {
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            border: 1px solid #991b1b; /* Red border for input focus */
+            width: 100%;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .input-style:focus {
+            outline: none;
+            border-color: #059669; /* Green focus ring */
+            box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.2);
+        }
+        .pulse-animation {
+            animation: pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .bg-exclusion {
+            background-color: #fffbeb; /* Gold/Cream tint */
+            border: 1px solid #fcd34d; /* Gold border */
+        }
+    </style>
 </head>
 <body class="min-h-screen flex items-start justify-center p-4">
 
-    <div id="app" class="w-full max-w-lg mt-4 space-y-6">
-        <div class="text-center">
-            <h1 class="text-5xl font-extrabold text-[#b91c1c] mb-2">🎄 Secret Santa Draw</h1>
-            <p class="text-lg text-gray-700 font-semibold mb-4">It's time to find out who you're buying for!</p>
-            <div id="user-info" class="text-xs text-gray-400">Loading user...</div>
-        </div>
-
-        <!-- SHARING INSTRUCTIONS BOX -->
-        <div class="card p-5 bg-green-50 space-y-3 border-4 border-[#059669]">
-            <h2 class="text-xl font-extrabold text-[#059669]">INSTRUCTIONS FOR THE WHOLE FAMILY:</h2>
-            <p class="text-sm text-gray-700">The app keeps track of your group using the **Group Name**.</p>
-            <ol class="list-decimal list-inside text-sm font-medium text-gray-700 space-y-2">
-                <li><strong class="text-[#b91c1c]">First Person (Organizer):</strong> Set the Group Name, add all the names, and click **DRAW NAMES NOW!**</li>
-                <li><strong class="text-[#059669]">Everyone Else:</strong> Enter the **EXACT SAME** Group Name and <strong class="text-red-700">PRESS HERE:</strong> <span class="bg-gray-200 p-1 rounded font-mono text-xs">LOAD/SAVE</span></li>
-                <li><strong class="text-[#b91c1c]">To See Your Result:</strong> Go to "Who did YOU Draw?", select your name, and your Secret Santa recipient will be revealed ONLY to you!</li>
-            </ol>
-        </div>
-
-
-        <!-- Group Setup and State Display -->
-        <div id="setup-card" class="card p-6 space-y-4">
-            <h2 class="text-2xl font-bold text-gray-700">1. Set Up & Load Your Group</h2>
-            <div id="loading-indicator" class="text-center text-gray-500 hidden">
-                <p class="pulse-animation">Loading group data...</p>
-            </div>
-
-            <label for="group-name" class="block text-sm font-medium text-gray-700">Group Name (e.g., SmithFamily2025)</label>
-            <div class="flex space-x-2">
-                <input type="text" id="group-name" placeholder="Enter group name or ID" class="input-style flex-grow">
-                <button onclick="loadGroup()" class="btn-secondary whitespace-nowrap">
-                    LOAD/SAVE
-                </button>
-            </div>
-            <p id="group-status" class="text-sm italic text-[#059669] font-medium"></p>
-
-            <h3 class="text-xl font-semibold text-gray-700 mt-4 pt-4 border-t border-gray-100">Participants (<span id="participant-count">0</span>)</h3>
-            <div class="flex space-x-2">
-                <input type="text" id="new-participant" placeholder="Add a family member's name" class="input-style flex-grow" onkeypress="handleParticipantInput(event)">
-                <button onclick="addParticipant()" class="btn-secondary">ADD</button>
-            </div>
-
-            <ul id="participant-list" class="space-y-2 max-h-48 overflow-y-auto pr-2">
-                <!-- Participants will be listed here -->
-            </ul>
-            
-            <!-- Exclusion Pairs Section -->
-            <h3 class="text-xl font-semibold text-gray-700 mt-6 pt-4 border-t border-gray-100">Exclusion Rules (Optional)</h3>
-            <p class="text-sm text-gray-500">Stop Person A from giving to Person B (e.g., married couples).</p>
-
-            <div class="flex space-x-2">
-                <select id="person-a" class="input-style text-sm">
-                    <option value="">-- Person A --</option>
-                </select>
-                <select id="person-b" class="input-style text-sm">
-                    <option value="">-- Person B --</option>
-                </select>
-                <button onclick="addExclusion()" class="btn-secondary whitespace-nowrap">LINK EXCLUSION</button>
-            </div>
-            <ul id="exclusion-list" class="space-y-2 max-h-32 overflow-y-auto pr-2">
-                <!-- Exclusion pairs will be listed here -->
-            </ul>
-
-        </div>
-
-        <!-- Draw and Results Section -->
-        <div id="draw-card" class="card p-6 space-y-6">
-            <h2 class="text-2xl font-bold text-gray-700">2. The Draw & Results</h2>
-
-            <div id="draw-actions">
-                <button onclick="drawNames()" id="draw-button" class="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed text-xl">
-                    <span id="draw-text">DRAW NAMES NOW!</span>
-                </button>
-                <p id="draw-message" class="mt-2 text-center text-[#b91c1c] font-bold"></p>
-                <p class="text-xs text-gray-500 text-center mt-2">Requires at least 3 names to start the draw.</p>
-            </div>
-
-            <!-- Reveal Section -->
-            <div id="reveal-section" class="border-t pt-4 mt-4 hidden">
-                <h3 class="text-xl font-bold text-gray-700 mb-3">Who did YOU Draw?</h3>
-                <label for="my-name-select" class="block text-sm font-medium text-gray-700">Select <strong class="text-[#b91c1c]">YOUR NAME</strong> from the list:</label>
-                <select id="my-name-select" class="input-style mb-4" onchange="revealDraw()">
-                    <option value="">-- Select Your Name --</option>
-                    <!-- Options populated from participants -->
-                </select>
-
-                <div id="my-draw-result" class="text-center p-4 bg-red-50 border border-red-200 rounded-lg text-lg font-bold text-red-700 min-h-[4rem] flex items-center justify-center">
-                    **Select your name above to see who you got!** <span class="text-xs italic">(Only you will see your result.)</span>
-                </div>
-
-                <!-- TTS Feature -->
-                <div class="mt-4 pt-4 border-t border-gray-100">
-                    <h4 class="text-lg font-medium text-gray-700 mb-2">🎉 Announce Draw Complete (Optional)</h4>
-                    <button onclick="generateAnnouncement()" id="tts-button" class="btn-secondary w-full disabled:opacity-50 disabled:cursor-not-allowed">
-                        <span id="tts-text">Generate Audio Announcement</span>
-                    </button>
-                    <audio id="tts-audio" controls class="w-full mt-3 hidden"></audio>
-                </div>
-
-                <!-- Admin View of All Pairs - NEW HIDE/SHOW TOGGLE -->
-                <div class="mt-6 pt-6 border-t border-gray-100">
-                    <div class="flex justify-between items-center cursor-pointer p-3 bg-red-50 rounded-xl border border-red-300 shadow-sm hover:bg-red-100 transition-colors" onclick="toggleAdminView()">
-                        <h4 class="text-lg font-extrabold text-[#b91c1c] flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M10 2a1 1 0 00-1 1v1a1 1 0 002 0V3a1 1 0 00-1-1zm4.95 3.05a1 1 0 00-1.414 0l-.707.707a1 1 0 001.414 1.414l.707-.707a1 1 0 000-1.414zM16 10a1 1 0 00-1-1h-1a1 1 0 100 2h1a1 1 0 001-1zM5.05 5.05a1 1 0 00-1.414 0l-.707.707a1 1 0 101.414 1.414l.707-.707a1 1 0 000-1.414zM4 10a1 1 0 00-1-1H2a1 1 0 100 2h1a1 1 0 001-1z" clip-rule="evenodd" />
-                                <path fill-rule="evenodd" d="M10 12a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
-                            </svg>
-                            Organizer View: Reveal ALL Pairs
-                        </h4>
-                        <svg id="admin-view-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#b91c1c] transition-transform duration-300 transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-                        </svg>
-                    </div>
-                    
-                    <div id="admin-pairs-content" class="space-y-3 mt-3 hidden">
-                        <p class="text-sm font-bold text-white p-3 bg-red-700 rounded-lg shadow-md">
-                            <strong class="text-xl">⚠️ SPOILER WARNING:</strong> ONLY the organizer should click this. Revealing this list will spoil the entire draw for everyone who sees it.
-                        </p>
-                        <ul id="pairs-list" class="space-y-1 text-sm text-gray-600 p-3 bg-white border border-red-300 rounded-lg shadow-inner">
-                            <!-- Pairs listed here -->
-                        </ul>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-    </div>
-
-    <!-- Firebase Imports and Main Script -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, onSnapshot, collection, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        // Set Firebase Log Level (Important for debugging Firestore)
-        setLogLevel('Debug');
-
-        // --- GLOBAL VARIABLES ---
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-secret-santa-app';
-        let firebaseConfig = {};
-        if (typeof __firebase_config !== 'undefined' && __firebase_config) {
-            try {
-                firebaseConfig = JSON.parse(__firebase_config);
-            } catch (e) {
-                console.error("Failed to parse __firebase_config:", e);
-                // Fallback or error state
-            }
-        }
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-
-        let db, auth;
-        let userId = null;
-        let isAuthReady = false;
-
-        // --- APPLICATION STATE ---
-        let participants = [];
-        let pairs = [];
-        let exclusions = []; 
-        let groupName = 'MyFamily';
-        let currentDrawMessage = '';
-
-        // --- DOM Elements ---
-        const $groupNameInput = document.getElementById('group-name');
-        const $groupStatus = document.getElementById('group-status');
-        const $loadingIndicator = document.getElementById('loading-indicator');
-        const $newParticipantInput = document.getElementById('new-participant');
-        const $participantList = document.getElementById('participant-list');
-        const $participantCount = document.getElementById('participant-count');
-        const $drawButton = document.getElementById('draw-button');
-        const $drawText = document.getElementById('draw-text');
-        const $drawMessage = document.getElementById('draw-message');
-        const $revealSection = document.getElementById('reveal-section');
-        const $myNameSelect = document.getElementById('my-name-select');
-        const $myDrawResult = document.getElementById('my-draw-result');
-        const $pairsList = document.getElementById('pairs-list');
-        const $userInfo = document.getElementById('user-info');
-        const $ttsButton = document.getElementById('tts-button');
-        const $ttsText = document.getElementById('tts-text');
-        const $ttsAudio = document.getElementById('tts-audio');
-        const $personASelect = document.getElementById('person-a');
-        const $personBSelect = document.getElementById('person-b');
-        const $exclusionList = document.getElementById('exclusion-list');
-        
-        // Admin View DOM elements
-        const $adminPairsContent = document.getElementById('admin-pairs-content');
-        const $adminViewIcon = document.getElementById('admin-view-icon');
-
-
-        // --- UTILITY FUNCTIONS for TTS (PCM to WAV Conversion) ---
-
-        /** Converts a base64 string to an ArrayBuffer. */
-        function base64ToArrayBuffer(base64) {
-            const binaryString = atob(base64);
-            const len = binaryString.length;
-            const bytes = new Uint8Array(len);
-            for (let i = 0; i < len; i++) {
-                bytes[i] = binaryString.charCodeAt(i);
-            }
-            return bytes.buffer;
-        }
-
-        /** Converts 16-bit signed PCM audio data to a WAV Blob. */
-        function pcmToWav(pcm16, sampleRate) {
-            const numChannels = 1;
-            const bytesPerSample = 2; // 16-bit PCM
-
-            const wavBuffer = new ArrayBuffer(44 + pcm16.length * bytesPerSample);
-            const view = new DataView(wavBuffer);
-
-            // Helper to write a string to the DataView
-            function writeString(view, offset, string) {
-                for (let i = 0; i < string.length; i++) {
-                    view.setUint8(offset + i, string.charCodeAt(i));
-                }
-            }
-
-            let offset = 0;
-
-            // RIFF chunk
-            writeString(view, offset, 'RIFF'); offset += 4;
-            view.setUint32(offset, 36 + pcm16.length * bytesPerSample, true); offset += 4; // ChunkSize
-            writeString(view, offset, 'WAVE'); offset += 4;
-
-            // FMT sub-chunk
-            writeString(view, offset, 'fmt '); offset += 4;
-            view.setUint32(offset, 16, true); offset += 4; // Subchunk1Size (16 for PCM)
-            view.setUint16(offset, 1, true); offset += 2; // AudioFormat (1 for PCM)
-            view.setUint16(offset, numChannels, true); offset += 2; // NumChannels
-            view.setUint32(offset, sampleRate, true); offset += 4; // SampleRate
-            view.setUint32(offset, sampleRate * numChannels * bytesPerSample, true); offset += 4; // ByteRate
-            view.setUint16(offset, numChannels * bytesPerSample, true); offset += 2; // BlockAlign
-            view.setUint16(offset, 16, true); offset += 2; // BitsPerSample (16 bit)
-
-            // Data sub-chunk
-            writeString(view, offset, 'data'); offset += 4;
-            view.setUint32(offset, pcm16.length * bytesPerSample, true); offset += 4; // Subchunk2Size
-
-            // PCM Data
-            for (let i = 0; i < pcm16.length; i++) {
-                view.setInt16(offset, pcm16[i], true);
-                offset += 2;
-            }
-
-            return new Blob([wavBuffer], { type: 'audio/wav' });
-        }
-
-
-        // --- FIREBASE INITIALIZATION AND AUTH ---
-
-        if (Object.keys(firebaseConfig).length > 0) {
-            const app = initializeApp(firebaseConfig);
-            db = getFirestore(app);
-            auth = getAuth(app);
-
-            // 1. Initial Authentication
-            onAuthStateChanged(auth, async (user) => {
-                if (user) {
-                    userId = user.uid;
-                    $userInfo.textContent = `User ID: ${userId}`;
-                    console.log("Firebase Auth Ready. User ID:", userId);
-                } else if (!isAuthReady) {
-                    // Sign in anonymously if no token is available for the first time
-                    try {
-                        if (initialAuthToken) {
-                            await signInWithCustomToken(auth, initialAuthToken);
-                        } else {
-                            await signInAnonymously(auth);
-                        }
-                    } catch (error) {
-                        console.error("Authentication failed:", error);
-                        // If all fails, still allow the app to run with an anonymous user ID (e.g., a random one)
-                        userId = auth.currentUser?.uid || crypto.randomUUID();
-                    }
-                }
-                isAuthReady = true;
-                // Once authenticated, load the default group
-                $groupNameInput.value = groupName;
-                loadGroup();
-            });
-        } else {
-            // Fallback for non-Firebase environment (should not happen in Canvas)
-            console.warn("Firebase configuration missing. App will run in non-persistent mode.");
-            userId = crypto.randomUUID();
-            isAuthReady = true;
-            $userInfo.textContent = `User ID: ${userId} (Non-Persistent)`;
-            // Manually render initial state
-            renderUI();
-        }
-
-        // --- FIRESTORE DATA HANDLING ---
-
-        function getGroupDocRef(group) {
-            if (!db || !isAuthReady || !group) return null;
-            const groupId = group.toLowerCase().replace(/[^a-z0-9]+/g, '_').substring(0, 50);
-            return doc(db, `artifacts/${appId}/public/data/secret_santa`, groupId);
-        }
-
-        /** Loads group data from Firestore and sets up a real-time listener. */
-        window.loadGroup = function() {
-            if (!isAuthReady || !db) {
-                $groupStatus.textContent = 'Authentication not ready.';
-                return;
-            }
-
-            const newGroupName = $groupNameInput.value.trim();
-            if (!newGroupName) {
-                $groupStatus.textContent = 'Group name cannot be empty.';
-                return;
-            }
-            groupName = newGroupName;
-            $loadingIndicator.classList.remove('hidden');
-
-            const docRef = getGroupDocRef(groupName);
-            if (!docRef) return;
-
-            // Set up real-time listener
-            onSnapshot(docRef, (docSnap) => {
-                $loadingIndicator.classList.add('hidden');
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    participants = data.participants || [];
-                    pairs = data.pairs || [];
-                    exclusions = data.exclusions || []; // Load exclusions
-                    $groupStatus.textContent = `Group "${groupName}" loaded successfully! You are ready to draw or reveal.`;
-                    console.log("Data updated in real-time:", data);
-                } else {
-                    $groupStatus.textContent = `Group "${groupName}" not found. Creating new group. Start adding names below.`;
-                    participants = [];
-                    pairs = [];
-                    exclusions = [];
-                    // Automatically save the empty state to create the document
-                    saveGroup();
-                }
-                renderUI();
-            }, (error) => {
-                $loadingIndicator.classList.add('hidden');
-                $groupStatus.textContent = `Error loading group: ${error.message}`;
-                console.error("Firestore read error:", error);
-                // Still render UI based on current local state
-                renderUI();
-            });
-        }
-
-        /** Saves the current participants and pairs state to Firestore. */
-        async function saveGroup() {
-            if (!db || !isAuthReady || !groupName) return;
-
-            const docRef = getGroupDocRef(groupName);
-            if (!docRef) return;
-
-            try {
-                await setDoc(docRef, {
-                    groupName: groupName,
-                    participants: participants,
-                    pairs: pairs,
-                    exclusions: exclusions, // Save exclusions
-                    updatedAt: new Date(),
-                    creatorId: userId,
-                }, { merge: true });
-                // Do not update $groupStatus here, rely on onSnapshot for state consistency
-            } catch (error) {
-                $groupStatus.textContent = `Error saving group: ${error.message}`;
-                console.error("Firestore write error:", error);
-            }
-        }
-
-        // --- PARTICIPANT MANAGEMENT ---
-
-        /** Adds a new participant to the list. */
-        window.addParticipant = function() {
-            const name = $newParticipantInput.value.trim();
-            if (name && !participants.map(n => n.toLowerCase()).includes(name.toLowerCase())) {
-                participants.push(name);
-                $newParticipantInput.value = '';
-                pairs = []; // Clear draw if participants change
-                saveGroup(); // Save immediately after modification
-            } else if (name) {
-                alertUser('Name already exists or is empty.', 'error');
-            }
-        }
-
-        /** Handles Enter key press for adding participants. */
-        window.handleParticipantInput = function(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-                addParticipant();
-            }
-        }
-
-        /** Removes a participant by name. */
-        window.removeParticipant = function(nameToRemove) {
-            participants = participants.filter(name => name !== nameToRemove);
-            // Also remove any related exclusions
-            exclusions = exclusions.filter(p => p[0] !== nameToRemove && p[1] !== nameToRemove);
-
-            if (pairs.length > 0) {
-                pairs = []; // Clear draw if participants change
-                alertUser('Participants changed. Draw results cleared. Please redraw!', 'warning');
-            }
-            saveGroup(); // Save immediately after modification
-        }
-
-        /** Renders the participant list on the UI. */
-        function renderParticipantList() {
-            $participantList.innerHTML = '';
-            $participantCount.textContent = participants.length;
-            participants.forEach(name => {
-                const li = document.createElement('li');
-                li.className = 'flex justify-between items-center p-2 bg-green-50 rounded-lg shadow-sm text-gray-700 border border-green-100';
-                li.innerHTML = `
-                    <span class="font-medium">${name}</span>
-                    <button onclick="removeParticipant('${name.replace(/'/g, "\\'")}')" class="text-red-500 hover:text-red-700 p-1 rounded-full transition-colors" title="Remove ${name}">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.728-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 10-2 0v6a1 1 0 102 0V8z" clip-rule="evenodd" />
-                        </svg>
-                    </button>
-                `;
-                $participantList.appendChild(li);
-            });
-            
-            // Re-render exclusion dropdowns
-            renderExclusionDropdowns();
-            renderExclusionList();
-        }
-        
-        // --- EXCLUSION MANAGEMENT ---
-
-        /** Renders the dropdowns for selecting exclusion pairs. */
-        function renderExclusionDropdowns() {
-            const optionsHtml = participants.map(name => `<option value="${name}">${name}</option>`).join('');
-            
-            // Re-populate the lists completely
-            $personASelect.innerHTML = `<option value="">-- Person A --</option>` + optionsHtml;
-            $personBSelect.innerHTML = `<option value="">-- Person B --</option>` + optionsHtml;
-            
-            // Ensure no selection is made by default after re-render
-            $personASelect.value = '';
-            $personBSelect.value = '';
-        }
-
-        /** Adds a new exclusion pair. */
-        window.addExclusion = function() {
-            const personA = $personASelect.value;
-            const personB = $personBSelect.value;
-
-            if (!personA || !personB) {
-                alertUser('Error: Please select TWO names from the dropdowns to link them.', 'error');
-                console.error("Exclusion failed: One or both names not selected.");
-                return;
-            }
-            if (personA === personB) {
-                alertUser('Error: A person cannot be excluded from themselves.', 'error');
-                return;
-            }
-            
-            // Check if both selected names are still in the participant list
-            if (!participants.includes(personA) || !participants.includes(personB)) {
-                alertUser('Error: One or both selected names are not current participants. Please load the group again.', 'error');
-                return;
-            }
-
-            // Standardize pair order for easy checking: [Name1, Name2] where Name1 < Name2 alphabetically
-            const newPair = personA < personB ? [personA, personB] : [personB, personA];
-            
-            // Check if the pair already exists
-            const exists = exclusions.some(p => p[0] === newPair[0] && p[1] === newPair[1]);
-
-            if (!exists) {
-                exclusions.push(newPair);
-                // Reset dropdowns after successful addition
-                $personASelect.value = '';
-                $personBSelect.value = '';
-                pairs = []; // Clear draw if rules change
-                saveGroup();
-                alertUser(`SUCCESS! Exclusion added: ${personA} and ${personB} are linked.`, 'info');
-            } else {
-                alertUser('Warning: This exclusion pair already exists.', 'warning');
-            }
-        }
-
-        /** Removes an exclusion pair. */
-        window.removeExclusion = function(name1, name2) {
-            // Standardize the pair to find it in the list
-            const pairToRemove = name1 < name2 ? [name1, name2] : [name2, name1];
-            
-            exclusions = exclusions.filter(p => !(p[0] === pairToRemove[0] && p[1] === pairToRemove[1]));
-            pairs = []; // Clear draw if rules change
-            saveGroup();
-        }
-
-        /** Renders the list of exclusion pairs on the UI. */
-        function renderExclusionList() {
-            $exclusionList.innerHTML = '';
-            if (exclusions.length === 0) {
-                $exclusionList.textContent = 'No exclusions set yet.';
-                $exclusionList.className = 'text-sm text-gray-400 italic';
-                return;
-            }
-
-            $exclusionList.className = 'space-y-2 max-h-32 overflow-y-auto pr-2';
-            exclusions.forEach(pair => {
-                const [personA, personB] = pair;
-                const li = document.createElement('li');
-                li.className = 'flex justify-between items-center p-2 bg-exclusion rounded-lg shadow-sm text-gray-700 text-sm';
-                li.innerHTML = `
-                    <span><strong class="text-red-700">${personA}</strong> and <strong class="text-red-700">${personB}</strong> CANNOT be matched.</span>
-                    <button onclick="removeExclusion('${personA.replace(/'/g, "\\'")}', '${personB.replace(/'/g, "\\'")}')" class="text-red-500 hover:text-red-700 p-1 rounded-full transition-colors" title="Remove exclusion">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.728-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 10-2 0v6a1 1 0 102 0V8z" clip-rule="evenodd" />
-                        </svg>
-                    </button>
-                `;
-                $exclusionList.appendChild(li);
-            });
-        }
-
-
-        // --- CORE DRAWING LOGIC ---
-
-        /** Checks if a specific pairing (giver -> receiver) is allowed by the exclusion rules. */
-        function isAllowedPair(giver, receiver, exclusionList) {
-            // Rule 1: Cannot gift self
-            if (giver === receiver) {
-                return false;
-            }
-
-            // Rule 2: Cannot gift excluded partner (A -> B or B -> A)
-            for (const pair of exclusionList) {
-                // Check A -> B
-                if (giver === pair[0] && receiver === pair[1]) return false;
-                // Check B -> A
-                if (giver === pair[1] && receiver === pair[0]) return false;
-            }
-            
-            return true;
-        }
-
-        /** Implements the Secret Santa draw logic (now with exclusions). */
-        function performDraw(names, exclusionList) {
-            if (names.length < 3) {
-                $drawMessage.textContent = 'The draw requires at least 3 participants for a proper Secret Santa!';
-                return [];
-            }
-            
-            const givers = [...names];
-            const receivers = [...names];
-            const MAX_ATTEMPTS = 1000; 
-
-            // Fisher-Yates shuffle algorithm
-            function shuffle(array) {
-                let currentIndex = array.length, randomIndex;
-                while (currentIndex !== 0) {
-                    randomIndex = Math.floor(Math.random() * currentIndex);
-                    currentIndex--;
-                    [array[currentIndex], array[randomIndex]] = [
-                        array[randomIndex], array[currentIndex]];
-                }
-                return array;
-            }
-
-            for (let attemptCount = 0; attemptCount < MAX_ATTEMPTS; attemptCount++) {
-                let availableReceivers = shuffle([...receivers]);
-                const attemptPairs = [];
-                let isSuccessful = true;
-
-                for (let i = 0; i < givers.length; i++) {
-                    const giver = givers[i];
-                    let foundMatch = false;
-
-                    for (let j = 0; j < availableReceivers.length; j++) {
-                        const receiver = availableReceivers[j];
-
-                        if (isAllowedPair(giver, receiver, exclusionList)) {
-                            attemptPairs.push({ giver, receiver });
-                            availableReceivers.splice(j, 1);
-                            foundMatch = true;
-                            break;
-                        }
-                    }
-
-                    if (!foundMatch) {
-                        isSuccessful = false;
-                        break; 
-                    }
-                }
-
-                if (isSuccessful && attemptPairs.length === givers.length) {
-                    return attemptPairs; 
-                }
-            }
-
-            $drawMessage.textContent = 'DRAW FAILED! The exclusion rules may make a valid draw impossible. Please remove one or more exclusion links and try again.';
-            console.error("Draw failed after max attempts.");
-            return [];
-        }
-
-        /** Initiates the draw, updates state, and saves to Firestore. */
-        window.drawNames = function() {
-            if (participants.length < 3) {
-                $drawMessage.textContent = 'The draw requires at least 3 participants.';
-                return;
-            }
-
-            $drawText.textContent = 'Drawing...';
-            $drawButton.disabled = true;
-
-            const newPairs = performDraw(participants, exclusions);
-
-            if (newPairs.length > 0) {
-                pairs = newPairs;
-                $drawMessage.textContent = '🎉 DRAW SUCCESSFUL! Results are saved and ready for everyone to check.';
-                currentDrawMessage = `The ${groupName} Secret Santa pairings have been successfully drawn! It's time to check the app to see who you got!`;
-                saveGroup(); 
-            } else {
-                $drawMessage.classList.add('text-red-700', 'font-bold');
-            }
-
-            $drawText.textContent = 'DRAW NAMES NOW!';
-            $drawButton.disabled = false;
-            renderUI();
-        }
-
-        // --- RESULTS AND REVEAL ---
-
-        /** Toggles the visibility of the admin pair list. */
-        window.toggleAdminView = function() {
-            const isHidden = $adminPairsContent.classList.contains('hidden');
-            if (isHidden) {
-                $adminPairsContent.classList.remove('hidden');
-                $adminViewIcon.classList.add('rotate-180');
-            } else {
-                $adminPairsContent.classList.add('hidden');
-                $adminViewIcon.classList.remove('rotate-180');
-            }
-        }
-
-
-        /** Renders the pairs list (for admin view) and the user selection list. */
-        function renderResults() {
-            // 1. Render Admin Pairs View
-            $pairsList.innerHTML = '';
-            $pairsList.textContent = 'No draw has been completed yet. Press "DRAW NAMES NOW!" to start.';
-            $revealSection.classList.add('hidden');
-
-            // Reset the admin view state on every render/load (keep it hidden)
-            if ($adminPairsContent) {
-                $adminPairsContent.classList.add('hidden');
-            }
-            if ($adminViewIcon) {
-                $adminViewIcon.classList.remove('rotate-180');
-            }
-
-            if (pairs.length > 0) {
-                $revealSection.classList.remove('hidden');
-                $pairsList.textContent = '';
-                pairs.forEach(p => {
-                    const li = document.createElement('li');
-                    li.textContent = `${p.giver} gives to ${p.receiver}`;
-                    li.className = 'p-1 border-b border-gray-100';
-                    $pairsList.appendChild(li);
-                });
-            }
-
-            // 2. Render User Select Dropdown
-            $myNameSelect.innerHTML = '<option value="">-- Select Your Name --</option>';
-            participants.forEach(name => {
-                const option = document.createElement('option');
-                option.value = name;
-                option.textContent = name;
-                $myNameSelect.appendChild(option);
-            });
-            $myDrawResult.innerHTML = '👉 **Select your name above to reveal your recipient!** <span class="text-xs italic">(This is the only way to see your result!)</span>';
-            $myDrawResult.className = 'text-center p-4 bg-red-50 border border-red-200 rounded-lg text-lg font-bold text-red-700 min-h-[4rem] flex items-center justify-center';
-
-            // Reset TTS
-            $ttsAudio.classList.add('hidden');
-            $ttsAudio.removeAttribute('src');
-            $ttsText.textContent = 'Generate Audio Announcement';
-            $ttsButton.disabled = false;
-        }
-
-        /** Reveals the draw result for the selected user. */
-        window.revealDraw = function() {
-            const selectedName = $myNameSelect.value;
-            if (!selectedName) {
-                $myDrawResult.innerHTML = '👉 **Select your name above to reveal your recipient!** <span class="text-xs italic">(This is the only way to see your result!)</span>';
-                $myDrawResult.className = 'text-center p-4 bg-red-50 border border-red-200 rounded-lg text-lg font-bold text-red-700 min-h-[4rem] flex items-center justify-center';
-                return;
-            }
-
-            const result = pairs.find(p => p.giver === selectedName);
-            if (result) {
-                $myDrawResult.innerHTML = `<span class="text-xl">YOU GOT:</span> <span class="text-3xl">${result.receiver.toUpperCase()}</span>`;
-                $myDrawResult.className = 'text-center p-4 bg-[#dcfce7] border border-[#059669] rounded-lg text-xl font-extrabold text-[#065f46] min-h-[4rem] flex items-center justify-center animate-pulse';
-            } else if (pairs.length > 0) {
-                $myDrawResult.innerHTML = `Error: Could not find a match for ${selectedName}. Please check the participant list.`;
-                $myDrawResult.className = 'text-center p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-lg font-bold text-yellow-700 min-h-[4rem] flex items-center justify-center';
-            }
-        }
-
-        /** Renders all dynamic UI components. */
-        function renderUI() {
-            renderParticipantList();
-            renderExclusionList(); 
-            renderResults();
-
-            // Enable/disable draw button based on participant count
-            $drawButton.disabled = participants.length < 3;
-            $drawMessage.textContent = participants.length < 3 && participants.length > 0 ? 'Add more participants to draw names.' : '';
-        }
-
-
-        // --- TEXT-TO-SPEECH ANNOUNCEMENT ---
-
-        async function fetchTTS(text) {
-            const apiKey = ""; // Canvas provides this dynamically
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
-
-            const payload = {
-                contents: [{
-                    parts: [{ text: text }]
-                }],
-                generationConfig: {
-                    responseModalities: ["AUDIO"],
-                    speechConfig: {
-                        voiceConfig: {
-                            // Using a festive, exciting voice
-                            prebuiltVoiceConfig: { voiceName: "Fenrir" }
-                        }
-                    }
-                },
-                model: "gemini-2.5-flash-preview-tts"
-            };
-
-            const maxRetries = 3;
-            let lastError = null;
-
-            for (let attempt = 0; attempt < maxRetries; attempt++) {
-                try {
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-
-                    if (!response.ok) {
-                        const errorData = await response.json();
-                        throw new Error(`API Error: ${response.status} - ${errorData.error.message}`);
-                    }
-
-                    const result = await response.json();
-                    const part = result?.candidates?.[0]?.content?.parts?.[0];
-                    const audioData = part?.inlineData?.data;
-                    const mimeType = part?.inlineData?.mimeType;
-
-                    if (audioData && mimeType && mimeType.startsWith("audio/L16")) {
-                        // Extract sample rate from mimeType string: audio/L16;rate=24000
-                        const rateMatch = mimeType.match(/rate=(\d+)/);
-                        const sampleRate = rateMatch ? parseInt(rateMatch[1], 10) : 24000;
-                        
-                        const pcmData = base64ToArrayBuffer(audioData);
-                        const pcm16 = new Int16Array(pcmData);
-                        const wavBlob = pcmToWav(pcm16, sampleRate);
-                        return URL.createObjectURL(wavBlob);
-                    } else {
-                        throw new Error("Invalid audio response format from API.");
-                    }
-                } catch (error) {
-                    lastError = error;
-                    console.warn(`TTS fetch attempt ${attempt + 1} failed. Retrying...`, error);
-                    await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempt) * 1000)); // Exponential backoff
-                }
-            }
-
-            throw lastError || new Error("Failed to generate TTS after multiple retries.");
-        }
-
-        window.generateAnnouncement = async function() {
-            if (pairs.length === 0) {
-                alertUser('Please draw names before generating an announcement.', 'error');
-                return;
-            }
-
-            $ttsButton.disabled = true;
-            $ttsText.textContent = 'Generating... (up to 10s)';
-            $ttsAudio.classList.add('hidden');
-            $ttsAudio.removeAttribute('src');
-
-            const announcement = currentDrawMessage || `The Secret Santa draw is complete! Everyone, check the app to see who you got. Happy Holidays!`;
-
-            try {
-                const audioUrl = await fetchTTS(`Say in an excited, cheerful, and slightly dramatic tone: ${announcement}`);
-                $ttsAudio.src = audioUrl;
-                $ttsAudio.classList.remove('hidden');
-                $ttsText.textContent = 'Play Announcement';
-            } catch (e) {
-                alertUser(`Failed to generate audio: ${e.message}.`, 'error');
-                $ttsText.textContent = 'Generation Failed (Retry)';
-            } finally {
-                $ttsButton.disabled = false;
-            }
-        }
-
-        // --- CUSTOM ALERT/MESSAGE BOX ---
-        function alertUser(message, type = 'info') {
-            let colorClass = 'text-[#059669]'; // Default green for info
-            if (type === 'error') colorClass = 'text-[#b91c1c]'; // Deep red for error
-            if (type === 'warning') colorClass = 'text-yellow-700'; 
-            
-            $drawMessage.textContent = message;
-            $drawMessage.className = `mt-2 text-center ${colorClass} font-bold`;
-            setTimeout(() => {
-                // Clear the message after 5 seconds
-                $drawMessage.textContent = '';
-                $drawMessage.className = `mt-2 text-center text-[#b91c1c] font-bold`;
-            }, 5000);
-        }
-
-        // Initial render call (will be re-run after auth/load)
-        window.onload = function() {
-            $groupNameInput.value = groupName;
-            if (isAuthReady) {
-                 renderUI();
-            }
-        }
-    </script>
+    <div id="app" class="w-full max-w-lg mt-4 space-y-6">
+        <div class="text-center">
+            <h1 class="text-5xl font-extrabold text-[#b91c1c] mb-2">🎄 Secret Santa Draw</h1>
+            <p class="text-lg text-gray-700 font-semibold mb-4">It's time to find out who you're buying for!</p>
+            <div id="user-info" class="text-xs text-gray-400">Loading user...</div>
+        </div>
+
+                <div class="card p-5 bg-green-50 space-y-3 border-4 border-[#059669]">
+            <h2 class="text-xl font-extrabold text-[#059669]">INSTRUCTIONS FOR THE WHOLE FAMILY:</h2>
+            <p class="text-sm text-gray-700">The app keeps track of your group using the **Group Name**.</p>
+            <ol class="list-decimal list-inside text-sm font-medium text-gray-700 space-y-2">
+                <li><strong class="text-[#b91c1c]">First Person (Organizer):</strong> Set the Group Name, add all the names, and click **DRAW NAMES NOW!**</li>
+                <li><strong class="text-[#059669]">Everyone Else:</strong> Enter the **EXACT SAME** Group Name and <strong class="text-red-700">PRESS HERE:</strong> <span class="bg-gray-200 p-1 rounded font-mono text-xs">LOAD/SAVE</span></li>
+                <li><strong class="text-[#b91c1c]">To See Your Result:</strong> Go to "Who did YOU Draw?", select your name, and your Secret Santa recipient will be revealed ONLY to you!</li>
+            </ol>
+        </div>
+
+
+                <div id="setup-card" class="card p-6 space-y-4">
+            <h2 class="text-2xl font-bold text-gray-700">1. Set Up & Load Your Group</h2>
+            <div id="loading-indicator" class="text-center text-gray-500 hidden">
+                <p class="pulse-animation">Loading group data...</p>
+            </div>
+
+            <label for="group-name" class="block text-sm font-medium text-gray-700">Group Name (e.g., SmithFamily2025)</label>
+            <div class="flex space-x-2">
+                <input type="text" id="group-name" placeholder="Enter group name or ID" class="input-style flex-grow">
+                <button onclick="loadGroup()" class="btn-secondary whitespace-nowrap">
+                    LOAD/SAVE
+                </button>
+            </div>
+            <p id="group-status" class="text-sm italic text-[#059669] font-medium"></p>
+
+            <h3 class="text-xl font-semibold text-gray-700 mt-4 pt-4 border-t border-gray-100">Participants (<span id="participant-count">0</span>)</h3>
+            <div class="flex space-x-2">
+                <input type="text" id="new-participant" placeholder="Add a family member's name" class="input-style flex-grow" onkeypress="handleParticipantInput(event)">
+                <button onclick="addParticipant()" class="btn-secondary">ADD</button>
+            </div>
+
+            <ul id="participant-list" class="space-y-2 max-h-48 overflow-y-auto pr-2">
+                            </ul>
+            
+                        <h3 class="text-xl font-semibold text-gray-700 mt-6 pt-4 border-t border-gray-100">Exclusion Rules (Optional)</h3>
+            <p class="text-sm text-gray-500">Stop Person A from giving to Person B (e.g., married couples).</p>
+
+            <div class="flex space-x-2">
+                <select id="person-a" class="input-style text-sm">
+                    <option value="">-- Person A --</option>
+                </select>
+                <select id="person-b" class="input-style text-sm">
+                    <option value="">-- Person B --</option>
+                </select>
+                <button onclick="addExclusion()" class="btn-secondary whitespace-nowrap">LINK EXCLUSION</button>
+            </div>
+            <ul id="exclusion-list" class="space-y-2 max-h-32 overflow-y-auto pr-2">
+                            </ul>
+
+        </div>
+
+                <div id="draw-card" class="card p-6 space-y-6">
+            <h2 class="text-2xl font-bold text-gray-700">2. The Draw & Results</h2>
+
+            <div id="draw-actions">
+                <button onclick="drawNames()" id="draw-button" class="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed text-xl">
+                    <span id="draw-text">DRAW NAMES NOW!</span>
+                </button>
+                <p id="draw-message" class="mt-2 text-center text-[#b91c1c] font-bold"></p>
+                <p class="text-xs text-gray-500 text-center mt-2">Requires at least 3 names to start the draw.</p>
+            </div>
+
+                        <div id="reveal-section" class="border-t pt-4 mt-4 hidden">
+                <h3 class="text-xl font-bold text-gray-700 mb-3">Who did YOU Draw?</h3>
+                <label for="my-name-select" class="block text-sm font-medium text-gray-700">Select <strong class="text-[#b91c1c]">YOUR NAME</strong> from the list:</label>
+                <select id="my-name-select" class="input-style mb-4" onchange="revealDraw()">
+                    <option value="">-- Select Your Name --</option>
+                                    </select>
+
+                <div id="my-draw-result" class="text-center p-4 bg-red-50 border border-red-200 rounded-lg text-lg font-bold text-red-700 min-h-[4rem] flex items-center justify-center">
+                    **Select your name above to see who you got!** <span class="text-xs italic">(Only you will see your result.)</span>
+                </div>
+
+                                <div class="mt-4 pt-4 border-t border-gray-100">
+                    <h4 class="text-lg font-medium text-gray-700 mb-2">🎉 Announce Draw Complete (Optional)</h4>
+                    <button onclick="generateAnnouncement()" id="tts-button" class="btn-secondary w-full disabled:opacity-50 disabled:cursor-not-allowed">
+                        <span id="tts-text">Generate Audio Announcement</span>
+                    </button>
+                    <audio id="tts-audio" controls class="w-full mt-3 hidden"></audio>
+                </div>
+
+                                <div class="mt-6 pt-6 border-t border-gray-100">
+                    <div class="flex justify-between items-center cursor-pointer p-3 bg-red-50 rounded-xl border border-red-300 shadow-sm hover:bg-red-100 transition-colors" onclick="toggleAdminView()">
+                        <h4 class="text-lg font-extrabold text-[#b91c1c] flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 2a1 1 0 00-1 1v1a1 1 0 002 0V3a1 1 0 00-1-1zm4.95 3.05a1 1 0 00-1.414 0l-.707.707a1 1 0 001.414 1.414l.707-.707a1 1 0 000-1.414zM16 10a1 1 0 00-1-1h-1a1 1 0 100 2h1a1 1 0 001-1zM5.05 5.05a1 1 0 00-1.414 0l-.707.707a1 1 0 101.414 1.414l.707-.707a1 1 0 000-1.414zM4 10a1 1 0 00-1-1H2a1 1 0 100 2h1a1 1 0 001-1z" clip-rule="evenodd" />
+                                <path fill-rule="evenodd" d="M10 12a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+                            </svg>
+                            Organizer View: Reveal ALL Pairs
+                        </h4>
+                        <svg id="admin-view-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#b91c1c] transition-transform duration-300 transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </div>
+                    
+                    <div id="admin-pairs-content" class="space-y-3 mt-3 hidden">
+                        <p class="text-sm font-bold text-white p-3 bg-red-700 rounded-lg shadow-md">
+                            <strong class="text-xl">⚠️ SPOILER WARNING:</strong> ONLY the organizer should click this. Revealing this list will spoil the entire draw for everyone who sees it.
+                        </p>
+                        <ul id="pairs-list" class="space-y-1 text-sm text-gray-600 p-3 bg-white border border-red-300 rounded-lg shadow-inner">
+                                                    </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+        <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot, collection, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Set Firebase Log Level (Important for debugging Firestore)
+        setLogLevel('Debug');
+
+        // --- GLOBAL VARIABLES ---
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-secret-santa-app';
+        let firebaseConfig = {};
+        if (typeof __firebase_config !== 'undefined' && __firebase_config) {
+            try {
+                firebaseConfig = JSON.parse(__firebase_config);
+            } catch (e) {
+                console.error("Failed to parse __firebase_config:", e);
+                // Fallback or error state
+            }
+        }
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        let db, auth;
+        let userId = null;
+        let isAuthReady = false;
+
+        // --- APPLICATION STATE ---
+        let participants = [];
+        let pairs = [];
+        let exclusions = []; 
+        let groupName = 'MyFamily';
+        let currentDrawMessage = '';
+
+        // --- DOM Elements ---
+        const $groupNameInput = document.getElementById('group-name');
+        const $groupStatus = document.getElementById('group-status');
+        const $loadingIndicator = document.getElementById('loading-indicator');
+        const $newParticipantInput = document.getElementById('new-participant');
+        const $participantList = document.getElementById('participant-list');
+        const $participantCount = document.getElementById('participant-count');
+        const $drawButton = document.getElementById('draw-button');
+        const $drawText = document.getElementById('draw-text');
+        const $drawMessage = document.getElementById('draw-message');
+        const $revealSection = document.getElementById('reveal-section');
+        const $myNameSelect = document.getElementById('my-name-select');
+        const $myDrawResult = document.getElementById('my-draw-result');
+        const $pairsList = document.getElementById('pairs-list');
+        const $userInfo = document.getElementById('user-info');
+        const $ttsButton = document.getElementById('tts-button');
+        const $ttsText = document.getElementById('tts-text');
+        const $ttsAudio = document.getElementById('tts-audio');
+        const $personASelect = document.getElementById('person-a');
+        const $personBSelect = document.getElementById('person-b');
+        const $exclusionList = document.getElementById('exclusion-list');
+        
+        // Admin View DOM elements
+        const $adminPairsContent = document.getElementById('admin-pairs-content');
+        const $adminViewIcon = document.getElementById('admin-view-icon');
+
+
+        // --- UTILITY FUNCTIONS for TTS (PCM to WAV Conversion) ---
+
+        /** Converts a base64 string to an ArrayBuffer. */
+        function base64ToArrayBuffer(base64) {
+            const binaryString = atob(base64);
+            const len = binaryString.length;
+            const bytes = new Uint8Array(len);
+            for (let i = 0; i < len; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+            return bytes.buffer;
+        }
+
+        /** Converts 16-bit signed PCM audio data to a WAV Blob. */
+        function pcmToWav(pcm16, sampleRate) {
+            const numChannels = 1;
+            const bytesPerSample = 2; // 16-bit PCM
+
+            const wavBuffer = new ArrayBuffer(44 + pcm16.length * bytesPerSample);
+            const view = new DataView(wavBuffer);
+
+            // Helper to write a string to the DataView
+            function writeString(view, offset, string) {
+                for (let i = 0; i < string.length; i++) {
+                    view.setUint8(offset + i, string.charCodeAt(i));
+                }
+            }
+
+            let offset = 0;
+
+            // RIFF chunk
+            writeString(view, offset, 'RIFF'); offset += 4;
+            view.setUint32(offset, 36 + pcm16.length * bytesPerSample, true); offset += 4; // ChunkSize
+            writeString(view, offset, 'WAVE'); offset += 4;
+
+            // FMT sub-chunk
+            writeString(view, offset, 'fmt '); offset += 4;
+            view.setUint32(offset, 16, true); offset += 4; // Subchunk1Size (16 for PCM)
+            view.setUint16(offset, 1, true); offset += 2; // AudioFormat (1 for PCM)
+            view.setUint16(offset, numChannels, true); offset += 2; // NumChannels
+            view.setUint32(offset, sampleRate, true); offset += 4; // SampleRate
+            view.setUint32(offset, sampleRate * numChannels * bytesPerSample, true); offset += 4; // ByteRate
+            view.setUint16(offset, numChannels * bytesPerSample, true); offset += 2; // BlockAlign
+            view.setUint16(offset, 16, true); offset += 2; // BitsPerSample (16 bit)
+
+            // Data sub-chunk
+            writeString(view, offset, 'data'); offset += 4;
+            view.setUint32(offset, pcm16.length * bytesPerSample, true); offset += 4; // Subchunk2Size
+
+            // PCM Data
+            for (let i = 0; i < pcm16.length; i++) {
+                view.setInt16(offset, pcm16[i], true);
+                offset += 2;
+            }
+
+            return new Blob([wavBuffer], { type: 'audio/wav' });
+        }
+
+
+        // --- FIREBASE INITIALIZATION AND AUTH ---
+
+        if (Object.keys(firebaseConfig).length > 0) {
+            const app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+
+            // 1. Initial Authentication
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    userId = user.uid;
+                    $userInfo.textContent = `User ID: ${userId}`;
+                    console.log("Firebase Auth Ready. User ID:", userId);
+                } else if (!isAuthReady) {
+                    // Sign in anonymously if no token is available for the first time
+                    try {
+                        if (initialAuthToken) {
+                            await signInWithCustomToken(auth, initialAuthToken);
+                        } else {
+                            await signInAnonymously(auth);
+                        }
+                    } catch (error) {
+                        console.error("Authentication failed:", error);
+                        // If all fails, still allow the app to run with an anonymous user ID (e.g., a random one)
+                        userId = auth.currentUser?.uid || crypto.randomUUID();
+                    }
+                }
+                
+                // *** FIX APPLIED HERE: Set isAuthReady and load the group ONLY after successful sign-in ***
+                isAuthReady = true;
+                
+                $groupNameInput.value = groupName;
+                loadGroup(true); // Call loadGroup with a flag to prevent re-displaying "Authentication not ready"
+            });
+        } else {
+            // Fallback for non-Firebase environment (should not happen in Canvas)
+            console.warn("Firebase configuration missing. App will run in non-persistent mode.");
+            userId = crypto.randomUUID();
+            isAuthReady = true;
+            $userInfo.textContent = `User ID: ${userId} (Non-Persistent)`;
+            $groupNameInput.value = groupName;
+            $groupStatus.textContent = 'Non-persistent mode. Data will NOT save.';
+            // Manually render initial state
+            renderUI();
+        }
+
+        // --- FIRESTORE DATA HANDLING ---
+
+        function getGroupDocRef(group) {
+            if (!db || !isAuthReady || !group) return null;
+            const groupId = group.toLowerCase().replace(/[^a-z0-9]+/g, '_').substring(0, 50);
+            return doc(db, `artifacts/${appId}/public/data/secret_santa`, groupId);
+        }
+
+        /** Loads group data from Firestore and sets up a real-time listener. */
+        // *** FIX APPLIED HERE: Added a parameter to suppress the initial error message for the async load. ***
+        window.loadGroup = function(isInitialLoad = false) {
+            if (!isAuthReady || !db) {
+                if (!isInitialLoad) {
+                    $groupStatus.textContent = 'Authentication not ready. Please wait a moment for the page to finish loading and try again.';
+                }
+                return;
+            }
+
+            const newGroupName = $groupNameInput.value.trim();
+            if (!newGroupName) {
+                $groupStatus.textContent = 'Group name cannot be empty.';
+                return;
+            }
+            groupName = newGroupName;
+            $loadingIndicator.classList.remove('hidden');
+
+            const docRef = getGroupDocRef(groupName);
+            if (!docRef) return;
+
+            // Set up real-time listener
+            onSnapshot(docRef, (docSnap) => {
+                $loadingIndicator.classList.add('hidden');
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    participants = data.participants || [];
+                    pairs = data.pairs || [];
+                    exclusions = data.exclusions || []; // Load exclusions
+                    $groupStatus.textContent = `Group "${groupName}" loaded successfully! You are ready to draw or reveal.`;
+                    console.log("Data updated in real-time:", data);
+                } else {
+                    $groupStatus.textContent = `Group "${groupName}" not found. Creating new group. Start adding names below.`;
+                    participants = [];
+                    pairs = [];
+                    exclusions = [];
+                    // Automatically save the empty state to create the document
+                    saveGroup();
+                }
+                renderUI();
+            }, (error) => {
+                $loadingIndicator.classList.add('hidden');
+                $groupStatus.textContent = `Error loading group: ${error.message}`;
+                console.error("Firestore read error:", error);
+                // Still render UI based on current local state
+                renderUI();
+            });
+        }
+
+        /** Saves the current participants and pairs state to Firestore. */
+        async function saveGroup() {
+            if (!db || !isAuthReady || !groupName) return;
+
+            const docRef = getGroupDocRef(groupName);
+            if (!docRef) return;
+
+            try {
+                await setDoc(docRef, {
+                    groupName: groupName,
+                    participants: participants,
+                    pairs: pairs,
+                    exclusions: exclusions, // Save exclusions
+                    updatedAt: new Date(),
+                    creatorId: userId,
+                }, { merge: true });
+                // Do not update $groupStatus here, rely on onSnapshot for state consistency
+            } catch (error) {
+                $groupStatus.textContent = `Error saving group: ${error.message}`;
+                console.error("Firestore write error:", error);
+            }
+        }
+
+        // --- PARTICIPANT MANAGEMENT ---
+
+        /** Adds a new participant to the list. */
+        window.addParticipant = function() {
+            const name = $newParticipantInput.value.trim();
+            if (name && !participants.map(n => n.toLowerCase()).includes(name.toLowerCase())) {
+                participants.push(name);
+                $newParticipantInput.value = '';
+                pairs = []; // Clear draw if participants change
+                saveGroup(); // Save immediately after modification
+            } else if (name) {
+                alertUser('Name already exists or is empty.', 'error');
+            }
+        }
+
+        /** Handles Enter key press for adding participants. */
+        window.handleParticipantInput = function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                addParticipant();
+            }
+        }
+
+        /** Removes a participant by name. */
+        window.removeParticipant = function(nameToRemove) {
+            participants = participants.filter(name => name !== nameToRemove);
+            // Also remove any related exclusions
+            exclusions = exclusions.filter(p => p[0] !== nameToRemove && p[1] !== nameToRemove);
+
+            if (pairs.length > 0) {
+                pairs = []; // Clear draw if participants change
+                alertUser('Participants changed. Draw results cleared. Please redraw!', 'warning');
+            }
+            saveGroup(); // Save immediately after modification
+        }
+
+        /** Renders the participant list on the UI. */
+        function renderParticipantList() {
+            $participantList.innerHTML = '';
+            $participantCount.textContent = participants.length;
+            participants.forEach(name => {
+                const li = document.createElement('li');
+                li.className = 'flex justify-between items-center p-2 bg-green-50 rounded-lg shadow-sm text-gray-700 border border-green-100';
+                li.innerHTML = `
+                    <span class="font-medium">${name}</span>
+                    <button onclick="removeParticipant('${name.replace(/'/g, "\\'")}')" class="text-red-500 hover:text-red-700 p-1 rounded-full transition-colors" title="Remove ${name}">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.728-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 10-2 0v6a1 1 0 102 0V8z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                `;
+                $participantList.appendChild(li);
+            });
+            
+            // Re-render exclusion dropdowns
+            renderExclusionDropdowns();
+            renderExclusionList();
+        }
+        
+        // --- EXCLUSION MANAGEMENT ---
+
+        /** Renders the dropdowns for selecting exclusion pairs. */
+        function renderExclusionDropdowns() {
+            const optionsHtml = participants.map(name => `<option value="${name}">${name}</option>`).join('');
+            
+            // Re-populate the lists completely
+            $personASelect.innerHTML = `<option value="">-- Person A --</option>` + optionsHtml;
+            $personBSelect.innerHTML = `<option value="">-- Person B --</option>` + optionsHtml;
+            
+            // Ensure no selection is made by default after re-render
+            $personASelect.value = '';
+            $personBSelect.value = '';
+        }
+
+        /** Adds a new exclusion pair. */
+        window.addExclusion = function() {
+            const personA = $personASelect.value;
+            const personB = $personBSelect.value;
+
+            if (!personA || !personB) {
+                alertUser('Error: Please select TWO names from the dropdowns to link them.', 'error');
+                console.error("Exclusion failed: One or both names not selected.");
+                return;
+            }
+            if (personA === personB) {
+                alertUser('Error: A person cannot be excluded from themselves.', 'error');
+                return;
+            }
+            
+            // Check if both selected names are still in the participant list
+            if (!participants.includes(personA) || !participants.includes(personB)) {
+                alertUser('Error: One or both selected names are not current participants. Please load the group again.', 'error');
+                return;
+            }
+
+            // Standardize pair order for easy checking: [Name1, Name2] where Name1 < Name2 alphabetically
+            const newPair = personA < personB ? [personA, personB] : [personB, personA];
+            
+            // Check if the pair already exists
+            const exists = exclusions.some(p => p[0] === newPair[0] && p[1] === newPair[1]);
+
+            if (!exists) {
+                exclusions.push(newPair);
+                // Reset dropdowns after successful addition
+                $personASelect.value = '';
+                $personBSelect.value = '';
+                pairs = []; // Clear draw if rules change
+                saveGroup();
+                alertUser(`SUCCESS! Exclusion added: ${personA} and ${personB} are linked.`, 'info');
+            } else {
+                alertUser('Warning: This exclusion pair already exists.', 'warning');
+            }
+        }
+
+        /** Removes an exclusion pair. */
+        window.removeExclusion = function(name1, name2) {
+            // Standardize the pair to find it in the list
+            const pairToRemove = name1 < name2 ? [name1, name2] : [name2, name1];
+            
+            exclusions = exclusions.filter(p => !(p[0] === pairToRemove[0] && p[1] === pairToRemove[1]));
+            pairs = []; // Clear draw if rules change
+            saveGroup();
+        }
+
+        /** Renders the list of exclusion pairs on the UI. */
+        function renderExclusionList() {
+            $exclusionList.innerHTML = '';
+            if (exclusions.length === 0) {
+                $exclusionList.textContent = 'No exclusions set yet.';
+                $exclusionList.className = 'text-sm text-gray-400 italic';
+                return;
+            }
+
+            $exclusionList.className = 'space-y-2 max-h-32 overflow-y-auto pr-2';
+            exclusions.forEach(pair => {
+                const [personA, personB] = pair;
+                const li = document.createElement('li');
+                li.className = 'flex justify-between items-center p-2 bg-exclusion rounded-lg shadow-sm text-gray-700 text-sm';
+                li.innerHTML = `
+                    <span><strong class="text-red-700">${personA}</strong> and <strong class="text-red-700">${personB}</strong> CANNOT be matched.</span>
+                    <button onclick="removeExclusion('${personA.replace(/'/g, "\\'")}', '${personB.replace(/'/g, "\\'")}')" class="text-red-500 hover:text-red-700 p-1 rounded-full transition-colors" title="Remove exclusion">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.728-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 10-2 0v6a1 1 0 102 0V8z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                `;
+                $exclusionList.appendChild(li);
+            });
+        }
+
+
+        // --- CORE DRAWING LOGIC ---
+
+        /** Checks if a specific pairing (giver -> receiver) is allowed by the exclusion rules. */
+        function isAllowedPair(giver, receiver, exclusionList) {
+            // Rule 1: Cannot gift self
+            if (giver === receiver) {
+                return false;
+            }
+
+            // Rule 2: Cannot gift excluded partner (A -> B or B -> A)
+            for (const pair of exclusionList) {
+                // Check A -> B
+                if (giver === pair[0] && receiver === pair[1]) return false;
+                // Check B -> A
+                if (giver === pair[1] && receiver === pair[0]) return false;
+            }
+            
+            return true;
+        }
+
+        /** Implements the Secret Santa draw logic (now with exclusions). */
+        function performDraw(names, exclusionList) {
+            if (names.length < 3) {
+                $drawMessage.textContent = 'The draw requires at least 3 participants for a proper Secret Santa!';
+                return [];
+            }
+            
+            const givers = [...names];
+            const receivers = [...names];
+            const MAX_ATTEMPTS = 1000; 
+
+            // Fisher-Yates shuffle algorithm
+            function shuffle(array) {
+                let currentIndex = array.length, randomIndex;
+                while (currentIndex !== 0) {
+                    randomIndex = Math.floor(Math.random() * currentIndex);
+                    currentIndex--;
+                    [array[currentIndex], array[randomIndex]] = [
+                        array[randomIndex], array[currentIndex]];
+                }
+                return array;
+            }
+
+            for (let attemptCount = 0; attemptCount < MAX_ATTEMPTS; attemptCount++) {
+                let availableReceivers = shuffle([...receivers]);
+                const attemptPairs = [];
+                let isSuccessful = true;
+
+                for (let i = 0; i < givers.length; i++) {
+                    const giver = givers[i];
+                    let matchFound = false;
+
+                    // Find a valid match for the current giver
+                    for (let j = 0; j < availableReceivers.length; j++) {
+                        const receiver = availableReceivers[j];
+
+                        if (isAllowedPair(giver, receiver, exclusionList)) {
+                            attemptPairs.push({ giver, receiver });
+                            // Remove receiver from available list
+                            availableReceivers.splice(j, 1);
+                            matchFound = true;
+                            break;
+                        }
+                    }
+
+                    if (!matchFound) {
+                        // This attempt failed, break and retry
+                        isSuccessful = false;
+                        break;
+                    }
+                }
+
+                if (isSuccessful) {
+                    console.log(`Draw successful after ${attemptCount + 1} attempts.`);
+                    return attemptPairs;
+                }
+            }
+
+            // If all attempts fail
+            $drawMessage.textContent = '❌ ERROR: Could not find a valid pairing solution. The exclusion rules may be too restrictive for the number of participants. Try reducing the number of exclusions.';
+            console.error("Secret Santa draw failed after max attempts. Rules too restrictive.");
+            return [];
+        }
+
+
+        /** Initiates the draw process. */
+        window.drawNames = function() {
+            if (participants.length < 3) {
+                $drawMessage.textContent = 'Please add at least 3 participants before drawing names.';
+                return;
+            }
+
+            $drawText.textContent = 'Drawing...';
+            $drawButton.disabled = true;
+            $drawMessage.textContent = '';
+            $revealSection.classList.add('hidden'); // Hide reveal section while drawing
+
+            // Delay the draw slightly to let the UI update and appear more dramatic
+            setTimeout(() => {
+                const newPairs = performDraw(participants, exclusions);
+                pairs = newPairs;
+                
+                if (pairs.length > 0) {
+                    // Save successful draw results
+                    saveGroup();
+                    $drawMessage.textContent = '✅ Draw successful! Names are now saved. Everyone can check their results.';
+                    currentDrawMessage = `The Secret Santa for the ${groupName} group is complete! Time to find out who you got!`;
+                    renderUI();
+                } else {
+                    // Keep old pairs in case of failure so the group doesn't accidentally clear an old draw
+                    // If pairs.length is 0 after draw, the error message is already set by performDraw
+                    $drawButton.disabled = false;
+                    $drawText.textContent = 'DRAW NAMES NOW!';
+                    renderUI();
+                }
+            }, 1500); // 1.5 second delay
+        }
+
+        // --- RESULT REVEAL AND UI RENDERING ---
+
+        /** Renders the main UI components based on the current state. */
+        function renderUI() {
+            renderParticipantList();
+            renderRevealDropdowns();
+            renderPairsList(); // For admin view
+
+            const isDrawn = pairs.length === participants.length && pairs.length > 0;
+
+            // Update draw button state
+            $drawButton.disabled = participants.length < 3;
+            $drawText.textContent = isDrawn ? 'REDRAW NAMES (⚠️ Clears current draw)' : 'DRAW NAMES NOW!';
+
+            if (isDrawn) {
+                $revealSection.classList.remove('hidden');
+                $drawMessage.textContent = 'Draw complete. Select your name below.';
+            } else {
+                $revealSection.classList.add('hidden');
+            }
+            
+            // Clear the drawn result when the state changes
+            $myDrawResult.innerHTML = '**Select your name above to see who you got!** <span class="text-xs italic">(Only you will see your result.)</span>';
+        }
+
+        /** Renders the dropdown for the user to select their name. */
+        function renderRevealDropdowns() {
+            $myNameSelect.innerHTML = '<option value="">-- Select Your Name --</option>';
+            participants.forEach(name => {
+                const option = document.createElement('option');
+                option.value = name;
+                option.textContent = name;
+                $myNameSelect.appendChild(option);
+            });
+        }
+
+        /** Reveals the Secret Santa recipient for the selected user. */
+        window.revealDraw = function() {
+            const selectedName = $myNameSelect.value;
+            const isDrawn = pairs.length === participants.length && pairs.length > 0;
+
+            if (!selectedName || !isDrawn) {
+                $myDrawResult.innerHTML = '**Select your name above to see who you got!** <span class="text-xs italic">(Only you will see your result.)</span>';
+                return;
+            }
+
+            const match = pairs.find(p => p.giver === selectedName);
+
+            if (match) {
+                $myDrawResult.innerHTML = `🎉 You are buying a gift for: <strong class="text-3xl text-red-900 block mt-2">${match.receiver}</strong>! 🎁`;
+                // Optionally clear the selection after 10 seconds for privacy
+                setTimeout(() => {
+                    if ($myNameSelect.value === selectedName) {
+                        $myNameSelect.value = '';
+                        $myDrawResult.innerHTML = '**Select your name above to see who you got!** <span class="text-xs italic">(Only you will see your result.)</span>';
+                    }
+                }, 10000); // 10 seconds
+            } else {
+                $myDrawResult.textContent = `Error: Could not find a match for ${selectedName}. Please check the draw status.`;
+            }
+        }
+
+        /** Renders the full list of pairs for the admin/organizer view. */
+        function renderPairsList() {
+            $pairsList.innerHTML = '';
+            if (pairs.length === 0) {
+                $pairsList.textContent = 'The draw has not been performed yet.';
+                return;
+            }
+
+            // Sort the pairs alphabetically by giver name for easy lookup
+            pairs.sort((a, b) => a.giver.localeCompare(b.giver));
+
+            pairs.forEach(pair => {
+                const li = document.createElement('li');
+                li.className = 'border-b border-gray-100 p-1 last:border-b-0';
+                li.innerHTML = `<strong>${pair.giver}</strong> ➡️ <strong>${pair.receiver}</strong>`;
+                $pairsList.appendChild(li);
+            });
+        }
+        
+        /** Toggles the admin view (full pairs list) */
+        window.toggleAdminView = function() {
+            const isHidden = $adminPairsContent.classList.contains('hidden');
+            if (isHidden) {
+                $adminPairsContent.classList.remove('hidden');
+                $adminViewIcon.classList.add('rotate-180');
+            } else {
+                $adminPairsContent.classList.add('hidden');
+                $adminViewIcon.classList.remove('rotate-180');
+            }
+        }
+
+
+        // --- GENERAL UTILITY FUNCTIONS ---
+        
+        /** Simple function for temporary messages (like name already exists) */
+        function alertUser(message, type) {
+            console.log(`ALERT (${type.toUpperCase()}): ${message}`);
+            // In a real app, this would use a toast notification. For now, we'll log.
+        }
+
+
+        // --- TTS (TEXT-TO-SPEECH) GENERATION ---
+        
+        window.generateAnnouncement = async function() {
+            if (!currentDrawMessage) {
+                alertUser("No draw message available. Please run a draw first.", "error");
+                return;
+            }
+
+            $ttsButton.disabled = true;
+            $ttsText.textContent = 'Generating audio...';
+            $ttsAudio.classList.add('hidden');
+            $ttsAudio.src = ''; // Clear previous audio
+
+            try {
+                const response = await fetch('tts_endpoint', { // Replace 'tts_endpoint' with your actual API endpoint
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text: currentDrawMessage }),
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                
+                // Assuming data.audioContent is a base64 encoded string of 16-bit PCM (as suggested by helper functions)
+                const pcmData = base64ToArrayBuffer(data.audioContent);
+                const pcmInt16 = new Int16Array(pcmData);
+                // Assuming a standard 24000Hz sample rate for TTS
+                const audioBlob = pcmToWav(pcmInt16, 24000); 
+
+                $ttsAudio.src = URL.createObjectURL(audioBlob);
+                $ttsAudio.classList.remove('hidden');
+                $ttsText.textContent = 'Play Audio Announcement';
+            } catch (error) {
+                console.error("TTS generation failed:", error);
+                $ttsText.textContent = 'Error Generating Audio';
+                alertUser(`TTS failed: ${error.message}. Is the 'tts_endpoint' correctly configured?`, 'error');
+            } finally {
+                $ttsButton.disabled = false;
+            }
+        }
+
+    </script>
+
 </body>
 </html>
